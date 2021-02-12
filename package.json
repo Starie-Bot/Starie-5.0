@@ -1,0 +1,19 @@
+{
+  "name": "starie",
+  "version": "5.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Matthe815",
+  "license": "ARR",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.4",
+    "request": "^2.88.2",
+    "require-all": "^3.0.0",
+    "tweetnacl": "^1.0.3"
+  }
+}
