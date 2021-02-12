@@ -37,38 +37,9 @@ class Command
     /**
      * The function to be executed on command run.
      */
-    Run(msg, args=null)
+    Run(client, message, res)
     {
         return console.error("Run not defined for command.");
-    }
-
-    /**
-     * Check whether the user's permission is over the required permission.
-     * @param {Message} message 
-     * @returns {Boolean} 
-     */
-    CheckPermission(message)
-    {
-        return true;
-    }
-
-    GetArgument(argument, args)
-    {
-        for (let arg of args) {
-            if (arg.name==argument)
-                return arg;
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the required permission level and return it.
-     * @returns {Number}
-     */
-    GetPermission()
-    {
-        return this.permission;
     }
 }
 
