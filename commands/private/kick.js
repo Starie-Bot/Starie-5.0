@@ -1,6 +1,5 @@
-const Command = require("../src/CommandSystem/Command");
+const Command = require("../../src/CommandSystem/Command");
 const {
-    verifyKeyMiddleware,
     InteractionResponseType
 } = require('discord-interactions')
 
