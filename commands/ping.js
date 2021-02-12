@@ -1,18 +1,27 @@
 const Command = require("../src/CommandSystem/Command");
+const {
+    verifyKeyMiddleware,
+    InteractionResponseType
+} = require('discord-interactions')
 
 class PingCommand extends Command 
 {
-    constructor(commandSystem, client)
+    constructor(client)
     {
         super({
             memberName: "ping",
             description: "Check the connection between your shard and Discord."
-        }, client, commandSystem);
+        }, client);
     }
 
-    Run(msg, args)
+    Run(client, message, res)
     {
-        msg.reply(`Pong \`${this.client.ws.ping}ms\``);
+        res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: `Pong! **${client.ws.ping}**ms!`,
+            },
+          });
     }
 }
 

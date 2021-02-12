@@ -1,19 +1,14 @@
 class Command 
 {
-    constructor(data, client, handler)
+    constructor(data, client)
     {
-        if (!data || !client || !handler)
+        if (!data || !client)
             return;
 
         /**
          * The authorative client object.  
          */
         this.client = client;
-
-        /**
-         * The command handler.
-         */
-        this.handler = handler;
         
         /**
          * The command's description
@@ -82,6 +77,16 @@ class Command
     CheckPermission(message)
     {
         return true;
+    }
+
+    GetArgument(argument, args)
+    {
+        for (let arg of args) {
+            if (arg.name==argument)
+                return arg;
+        }
+
+        return null;
     }
 
     /**
