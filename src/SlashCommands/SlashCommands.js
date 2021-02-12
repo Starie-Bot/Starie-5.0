@@ -1,19 +1,21 @@
-const request = require("request");
-const express = require("express");
-const path = require("path");
+const request = require("request"),
+      express = require("express"),
+      path = require("path");
+
+const Command = require("../CommandSystem/Command")
 
 const {ReadDirectory} = require("../Utilities/FileUtilities");
-const {Difference} = require("../Utilities/ArrayUtilities");
 
-
-const nacl = require('tweetnacl');
+/**
+ * @typedef {Object} SlashCommandOptions
+ * @property {Boolean} local Whether or not the command affects the local or global cache.
+ * @property {Command} command The command affected by this operation.
+ * @property {String} id The referenced ID, can be separate from the command. 
+ */
 const {
-    verifyKeyMiddleware,
-    InteractionResponseType
+    verifyKeyMiddleware
 } = require('discord-interactions')
-const app = express();
-
-const commands = new Map();
+const app = express(); 
 
 class SlashCommands {
     constructor(client, config) {
@@ -23,6 +25,12 @@ class SlashCommands {
         this.client = client;
         this.PUBLIC_KEY = config.PUBLIC_KEY;
         this.SERVER_PORT = config.SERVER_PORT;
+        this.BASE_URL = `https://discord.com/api/v8/applications/${config.BOT_ID}`;
+
+        this.HEADER = {
+            "Content-Type": "application/json",
+            "Authorization": `Bot ${config.TOKEN}`
+        };
 
         // This is a maintained cache of every command present on the Discord servers
         this.REGISTERED_COMMANDS = {
@@ -30,7 +38,7 @@ class SlashCommands {
             LOCAL:null
         }
 
-        this.FetchSubmittedCommands();
+        this.FillRegisteredCommands();
 
         // This is a cache containing only local files.
         this.COMMANDS = {
@@ -42,7 +50,8 @@ class SlashCommands {
         ReadDirectory(path.join(__dirname, "../../commands/global"), resolved => {let command = new resolved(this.client);this.COMMANDS.GLOBAL.set(command.memberName, command)});
         ReadDirectory(path.join(__dirname, "../../commands/private"), resolved => {let command = new resolved(this.client);this.COMMANDS.LOCAL.set(command.memberName, command)});
 
-        commands.forEach(command => this.AddGuildCommand(command.memberName, command.description, command.args));
+        this.COMMANDS.LOCAL.forEach(command => this.Add({command, local: true})); // Add all of the commands present in the local cache.
+        this.COMMANDS.GLOBAL.forEach(command => this.Add({command, local: false})); // Add all of the commands present in the global cache.
 
         app.post("/api/interactions", verifyKeyMiddleware(config.PUBLIC_KEY), async (req, res) => {
             const message = req.body;
@@ -59,93 +68,86 @@ class SlashCommands {
         app.listen(this.SERVER_PORT);
     }
 
-    async FetchSubmittedCommands() {
-        this.REGISTERED_COMMANDS.GLOBAL = await this.GetGlobals();
-        this.REGISTERED_COMMANDS.LOCAL = await this.GetGuild();
+    /**
+     * Fill the list of registered commands and perform any dependant tasks.
+     */
+    async FillRegisteredCommands() {
+        this.REGISTERED_COMMANDS.GLOBAL = await this.GetAll({local:false})
+        this.REGISTERED_COMMANDS.LOCAL = await this.GetAll({local:true});
 
-        this.RemoveUnused();
+        this.Purge();
     }
 
-    async RemoveUnused() {
+    /**
+     * Purge the Discord cache of unused local and global commands.
+     * @param {SlashCommandOptions} options
+     */
+    async Purge() {
         this.REGISTERED_COMMANDS.LOCAL.forEach(command => {
             if (!this.COMMANDS.LOCAL.has(command.name))
-                this.RemoveLocalCommand(command.id);
+                this.Remove({id: command.id, local: true});
+        });
+
+        this.REGISTERED_COMMANDS.GLOBAL.forEach(command => {
+            if (!this.COMMANDS.GLOBAL.has(command.name))
+                this.Remove({id: command.id, local: false});
         });
     }
 
-    async RemoveLocalCommand(id) {
-        console.log("Removing");
+    /**
+     * Remove a command from Discord's server cache.
+     * @param {SlashCommandOptions} options 
+     */
+    async Remove(options) {
         return new Promise((resolve, reject) => {
             request.delete({
-                url: `https://discord.com/api/v8/applications/279451341909262337/guilds/606926504424767488/commands/${id}`,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bot Mjc5NDUxMzQxOTA5MjYyMzM3.WJ0xVw.Y8ep0-LhdFCBfug8gwhmH6xrUUU"
-                }
-            }, (err, response, body) => {
+                url: `${this.BASE_URL}/${options.local||true==true?"guilds/606926504424767488/":""}commands/${options.id}`,
+                "headers": this.HEADER
+            }, (err, _, body) => {
+                if (err)
+                    return reject(err);
+
+                resolve(body);
             });
         });
     }
-    
-    async GetGlobals() {
+
+    /**
+     * Get every single command present within Discord's server cache.
+     * @param {SlashCommandOptions} options
+     * @returns {Command[]} 
+     */
+    async GetAll(options) {
         return new Promise((resolve, reject) => {
             request.get({
-                url: `https://discord.com/api/v8/applications/279451341909262337/commands`,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bot Mjc5NDUxMzQxOTA5MjYyMzM3.WJ0xVw.Y8ep0-LhdFCBfug8gwhmH6xrUUU"
-                }
-            }, (err, response, body) => {
-                resolve(JSON.parse(body));
+                url: `${this.BASE_URL}/${options.local||true==true?"guilds/606926504424767488/":""}commands`,
+                headers: this.HEADER,
+            }, (err, _, body) => {
+                if (err)
+                    return reject(err);
+
+                return resolve(JSON.parse(body));
             });
         });
     }
 
-    async GetGuild() {
+    /**
+     * Add a command to Discord server cache.
+     * @param {SlashCommandOptions} options 
+     * @returns {Command[]}
+     */
+    async Add(options) {
         return new Promise((resolve, reject) => {
-            request.get({
-                url: `https://discord.com/api/v8/applications/279451341909262337/guilds/606926504424767488/commands`,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bot Mjc5NDUxMzQxOTA5MjYyMzM3.WJ0xVw.Y8ep0-LhdFCBfug8gwhmH6xrUUU"
-                }
-            }, (err, response, body) => {
-                resolve(JSON.parse(body));
+            request.post({
+                url: `${this.BASE_URL}/${options.local||true==true?"guilds/606926504424767488/":""}commands`,
+                headers: this.HEADER,
+                json: options.command
+            }, (err, _, body) => {
+                if (err)
+                    return reject(err);
+
+                resolve(body);
             });
-        });
-    }
-
-    AddGlobalCommand(name, description, options) {
-        request.post({
-            url: `https://discord.com/api/v8/applications/279451341909262337/commands`,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bot Mjc5NDUxMzQxOTA5MjYyMzM3.WJ0xVw.Y8ep0-LhdFCBfug8gwhmH6xrUUU"
-            },
-            json: {
-                name,
-                description,
-                options
-            }
-        }, (err, response, body) => {
-            console.log(body);
-        });
-    }
-
-    AddGuildCommand(name, description, options) {
-        request.post({
-            url: `https://discord.com/api/v8/applications/279451341909262337/guilds/606926504424767488/commands`,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bot Mjc5NDUxMzQxOTA5MjYyMzM3.WJ0xVw.Y8ep0-LhdFCBfug8gwhmH6xrUUU"
-            },
-            json: {
-                name,
-                description,
-                options
-            }
-        }, (err, response, body) => {
-            console.log(body);
         });
     }
 }

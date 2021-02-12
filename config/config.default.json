@@ -1,6 +1,7 @@
 {
     "TOKEN"        :  "YOUR_TOKEN_HERE",
     "PUBLIC_KEY"   :  "YOUR_KEY_HERE",
+    "BOT_ID"       :  "YOUR_ID_HERE",
     
     "OWNERS"       :  [],
 
