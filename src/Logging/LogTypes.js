@@ -1,0 +1,6 @@
+module.exports = {
+    NETCALL   :"NETCALL",
+    NETRETURN :"NETRETURN",
+    CMDCALL   :"CMDCALL",
+    CMDEXECUTE:"CALLEXECUTE"
+};
