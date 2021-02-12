@@ -6,21 +6,19 @@ const {
     InteractionResponseType
 } = require('discord-interactions')
 const app = express();
-const port = 4949;
 
-const PUBLIC_KEY = "db6ede77774ff4ae6f6c21a8469ebdcddf40bbfa59259f1a08a9f32276b3894e";
 const commands = new Map();
-var cli;
 
 class SlashCommands {
-    constructor(client) {
-        cli = client;
+    constructor(client, config) {
+        this.client = client;
+        this.PUBLIC_KEY = config.PUBLIC_KEY;
+        this.SERVER_PORT = config.SERVER_PORT;
 
         require("require-all")({
             dirname: "/var/bots/commands",
             resolve: (command) => {
                 let loaded = new command(cli);
-                console.log(loaded.memberName);
                 commands.set(loaded.memberName, loaded);
             }
         });

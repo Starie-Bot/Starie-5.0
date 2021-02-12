@@ -1,0 +1,8 @@
+{
+    "TOKEN"        :  "YOUR_TOKEN_HERE",
+    "PUBLIC_KEY"   :  "YOUR_KEY_HERE",
+    
+    "OWNERS"       :  [],
+
+    "SERVER_PORT"  : 4949
+}
