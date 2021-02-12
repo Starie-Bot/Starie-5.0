@@ -1,3 +1,5 @@
+const {Client} = require("discord.js");
+
 const OptionType  = require("./OptionType");
 /**
  * @typedef  {Object}     Option
@@ -10,6 +12,15 @@ const OptionType  = require("./OptionType");
  */
 class Command 
 {
+    /**
+     * @typedef  {Object}   CommandData
+     * @property {String}   name
+     * @property {String}   description
+     * @property {Option[]} args
+     * 
+     * @param {CommandData} data 
+     * @param {Client}      client 
+     */
     constructor(data, client)
     {
         if (!data || !client)
