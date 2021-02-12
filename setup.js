@@ -22,7 +22,7 @@ rl.question('What is the token of the Discord Bot you wish to use?\n', token => 
             console.log("Configuration Complete");
             console.log("Writing File")
 
-            fs.writeFileSync("./config/config.json", JSON.stringify(config));
+            fs.writeFileSync("./config/config.json", JSON.stringify(config, null, 1));
 
             console.log("Setup Complete")
             process.exit();
