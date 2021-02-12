@@ -1,3 +1,13 @@
+const OptionType  = require("./OptionType");
+/**
+ * @typedef  {Object}     Option
+ * @property {OptionType} type
+ * @property {String}     name
+ * @property {String}     description
+ * @property {boolean}    required
+ * @property {String[]}   choices
+ * @property {Option[]}   options
+ */
 class Command 
 {
     constructor(data, client)
@@ -6,59 +16,22 @@ class Command
             return;
 
         /**
-         * The authorative client object.  
+         * The command's name, defaults to the member name;
+         * @type {String}
          */
-        this.client = client;
-        
+        this.name = data.memberName;
+
         /**
          * The command's description
+         * @type {String}
          */
         this.description = data.description || "No description";
 
         /**
-         * The command's name, defaults to the member name;
-         */
-        this.name = data.name || data.memberName;
-
-        /**
-         * The command aliases.
-         */
-        this.aliases = data.aliases || [];
-
-        /**
-         * The command's invoker name.
-         */
-        this.memberName = data.memberName || console.error("Member-Name must be defined on a command.");
-    
-        /**
-         * The enforced permission level required to execute the command.
-         */
-        this.permission = data.permission || 0;
-
-        /**
-         * Whether or not the command is enabled and usable.
-         */
-        this.enabled = data.enabled || true;
-    
-        /**
-         * The assigned category table.
-         */
-        this.category = data.category || "General";
-
-        /**
          * The arguments.
+         * @type {Option}
          */
-        this.args = data.args || [];
-
-        /**
-         * The package this command is part of.
-         */
-        this.package = data.package||null;
-
-        /**
-         * Whether or not the command silently fails.
-         */
-        this.silentFail = data.silentFail || false;
+        this.options = data.args || [];
     }
 
     /**
