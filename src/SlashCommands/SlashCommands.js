@@ -60,11 +60,11 @@ class SlashCommands {
 
             switch (message.type) {
                 case 2:
-                    if (!(command = commands.get(message.data.name)))
+                    if (!(command = this.COMMANDS.LOCAL.get(message.data.name)))
                         return;
     
                     Log.Print(JSON.stringify(command), CMDEXECUTE);
-                    return command.Run(cli, message, res); 
+                    return command.Run(this.client, message, res); 
             }
         });
 
@@ -93,7 +93,7 @@ class SlashCommands {
 
         this.REGISTERED_COMMANDS.GLOBAL.forEach(command => {
             if (!this.COMMANDS.GLOBAL.has(command.name))
-                this.Remove({id: command.id, local: true});
+                this.Remove({id: command.id, local: false});
         });
     }
 
