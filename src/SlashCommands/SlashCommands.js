@@ -47,8 +47,8 @@ class SlashCommands {
         } 
 
         /// Read from the global and local directory to determine local commands.
-        ReadDirectory(path.join(__dirname, "../../commands/global"), resolved => {let command = new resolved(this.client);this.COMMANDS.GLOBAL.set(command.memberName, command)});
-        ReadDirectory(path.join(__dirname, "../../commands/private"), resolved => {let command = new resolved(this.client);this.COMMANDS.LOCAL.set(command.memberName, command)});
+        ReadDirectory(path.join(__dirname, "../../commands/global"), resolved => {let command = new resolved(this.client);this.COMMANDS.GLOBAL.set(command.name, command)});
+        ReadDirectory(path.join(__dirname, "../../commands/private"), resolved => {let command = new resolved(this.client);this.COMMANDS.LOCAL.set(command.name, command)});
 
         this.COMMANDS.LOCAL.forEach(command => this.Add({command, local: true})); // Add all of the commands present in the local cache.
         this.COMMANDS.GLOBAL.forEach(command => this.Add({command, local: false})); // Add all of the commands present in the global cache.
@@ -75,7 +75,7 @@ class SlashCommands {
      * Fill the list of registered commands and perform any dependant tasks.
      */
     async FillRegisteredCommands() {
-        this.REGISTERED_COMMANDS.GLOBAL = await this.GetAll({local:false})
+        this.REGISTERED_COMMANDS.GLOBAL = await this.GetAll({local:false});
         this.REGISTERED_COMMANDS.LOCAL  = await this.GetAll({local:true});
 
         this.Purge();
@@ -88,6 +88,11 @@ class SlashCommands {
     async Purge() {
         this.REGISTERED_COMMANDS.LOCAL.forEach(command => {
             if (!this.COMMANDS.LOCAL.has(command.name))
+                this.Remove({id: command.id, local: true});
+        });
+
+        this.REGISTERED_COMMANDS.GLOBAL.forEach(command => {
+            if (!this.COMMANDS.GLOBAL.has(command.name))
                 this.Remove({id: command.id, local: true});
         });
     }
@@ -123,7 +128,7 @@ class SlashCommands {
 
         return new Promise((resolve, reject) => {
             request.get({
-                url    :  `${this.BASE_URL}/${(options.local||true)==true?"guilds/606926504424767488/":""}commands`,
+                url    :  `${this.BASE_URL}/${(options.local)==true?"guilds/606926504424767488/":""}commands`,
                 headers:  this.HEADER,
             }, (err, _, body) => {
                 Log.Print(JSON.stringify(body), NETRETURN);
@@ -141,12 +146,12 @@ class SlashCommands {
      * @param {SlashCommandOptions} options 
      * @returns {Command[]}
      */
-    async Add(options) {
+    Add(options) {
         Log.Print(`[Add] ${JSON.stringify(options)}`)
 
         return new Promise((resolve, reject) => {
             request.post({
-                url    : `${this.BASE_URL}/${(options.local||true)==true?"guilds/606926504424767488/":""}commands`,
+                url    : `${this.BASE_URL}/${(options.local)==true?"guilds/606926504424767488/":""}commands`,
                 headers: this.HEADER,
                 json   : options.command
             }, (err, _, body) => {
@@ -155,7 +160,7 @@ class SlashCommands {
                 if (err)
                     return reject(err);
 
-                resolve(body);
+                return resolve(body);
             });
         });
     }
