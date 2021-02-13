@@ -60,6 +60,8 @@ class SlashCommands {
 
             switch (message.type) {
                 case 2:
+                    let command;
+                    
                     if (!(command = this.COMMANDS.LOCAL.get(message.data.name)))
                         return;
     
