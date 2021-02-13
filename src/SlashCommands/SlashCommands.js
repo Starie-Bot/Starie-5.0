@@ -14,7 +14,7 @@ const {ReadDirectory} = require("../Utilities/FileUtilities");
  * @property {String}  id                   The referenced ID, can be separate from the command. 
  */
 const { verifyKeyMiddleware } = require('discord-interactions');
-const { NETRETURN, CMDCALL }  = require("../Logging/LogTypes");
+const { NETRETURN, CMDCALL, CMDEXECUTE }  = require("../Logging/LogTypes");
 const app = express(); 
 
 class SlashCommands {
@@ -61,7 +61,7 @@ class SlashCommands {
             switch (message.type) {
                 case 2:
                     let command;
-                    
+
                     if (!(command = this.COMMANDS.LOCAL.get(message.data.name)))
                         return;
     
