@@ -82,7 +82,6 @@ class SlashCommands {
      * Fill the list of registered commands and perform any dependant tasks.
      */
     async FillRegisteredCommands() {
-        d
         this.REGISTERED_COMMANDS.GLOBAL = await this.GetAll({local:false});
         this.REGISTERED_COMMANDS.LOCAL  = await this.GetAll({local:true});
 
