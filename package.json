@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "setup": "node setup"
+    "setup": "node setup",
     "test" : "node test"
   },
   "author": "Matthe815",
