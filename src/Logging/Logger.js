@@ -2,7 +2,7 @@ const LogTypes = require("./LogTypes");
 
 class Logger {
     constructor() {
-        this.enabledTypes = process.argv[2].split(",");
+        this.enabledTypes = (process.argv[2]||"").split(",");
     }
 
     /**
