@@ -23,6 +23,7 @@ class SlashCommands {
         /// Read from the configuration.
         ///
         this.client       = client;
+        this.config       = config;
         this.PUBLIC_KEY   = config.PUBLIC_KEY;
         this.SERVER_PORT  = config.SERVER_PORT;
         this.BASE_URL     = `https://discord.com/api/v8/applications/${config.BOT_ID}`;
@@ -34,17 +35,21 @@ class SlashCommands {
 
         // This is a maintained cache of every command present on the Discord servers
         this.REGISTERED_COMMANDS = {
-            GLOBAL: null,
-            LOCAL : null
+            GLOBAL: [],
+            LOCAL : []
         }
-
-        this.FillRegisteredCommands();
 
         // This is a cache containing only local files.
         this.COMMANDS = {
             GLOBAL : new Map(),
             LOCAL  : new Map()
-        } 
+        }
+
+        // End here if this is created for the purpose of unit-testing.
+        if (config.UNIT_TESTS)
+            return;
+
+        this.FillRegisteredCommands();
 
         /// Read from the global and local directory to determine local commands.
         ReadDirectory(path.join(__dirname, "../../commands/global"), resolved => {let command = new resolved(this.client);this.COMMANDS.GLOBAL.set(command.name, command)});
@@ -77,10 +82,12 @@ class SlashCommands {
      * Fill the list of registered commands and perform any dependant tasks.
      */
     async FillRegisteredCommands() {
+        d
         this.REGISTERED_COMMANDS.GLOBAL = await this.GetAll({local:false});
         this.REGISTERED_COMMANDS.LOCAL  = await this.GetAll({local:true});
 
-        this.Purge();
+        if (!this.config.UNIT_TESTS)
+            this.Purge();
     }
 
     /**
