@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index",
     "setup": "node setup"
+    "test" : "node test"
   },
   "author": "Matthe815",
   "license": "ARR",
