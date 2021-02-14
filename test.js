@@ -8,6 +8,7 @@ client.on("ready", async _ => {
         await Slash.FillRegisteredCommands();
         let command = await Slash.Add({command:{name:"test", description:"test"}, local:true});
         Slash.Remove({id:command.id, local:true});
+        process.exit(0);
     } catch (e) {
         throw e;
     }
