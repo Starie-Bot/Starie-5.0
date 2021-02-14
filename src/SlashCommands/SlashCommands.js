@@ -50,7 +50,7 @@ class SlashCommands {
         ReadDirectory(path.join(__dirname, "../../commands/global"), resolved => {let command = new resolved(this.client);this.COMMANDS.GLOBAL.set(command.name, command)});
         ReadDirectory(path.join(__dirname, "../../commands/private"), resolved => {let command = new resolved(this.client);this.COMMANDS.LOCAL.set(command.name, command)});
 
-        this.COMMANDS.LOCAL.forEach(command => this.Add({command, local: true})); // Add all of the commands present in the local cache.
+        this.COMMANDS.LOCAL.forEach(command => this.Add({command, local: true}));   // Add all of the commands present in the local cache.
         this.COMMANDS.GLOBAL.forEach(command => this.Add({command, local: false})); // Add all of the commands present in the global cache.
 
         app.post("/api/interactions", verifyKeyMiddleware(config.PUBLIC_KEY), async (req, res) => {
