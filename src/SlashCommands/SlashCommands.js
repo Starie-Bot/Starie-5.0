@@ -3,6 +3,7 @@ const express = require('express')
 const path = require('path')
 
 const Log = new (require('../Logging/Logger'))()
+const { Message } = require('../SlashCommands/Message')
 
 const { ReadDirectory } = require('../Utilities/FileUtilities')
 
@@ -67,7 +68,10 @@ class SlashCommands {
           if (!(command = this.COMMANDS.LOCAL.get(message.data.name))) { return }
 
           Log.Print(JSON.stringify(command), CMDEXECUTE)
-          return command.Run(this.client, message, res)
+
+          if (command.HasPermission(new Message(message))) {
+            return command.Run(new Message(message))
+          }
       }
     })
 
