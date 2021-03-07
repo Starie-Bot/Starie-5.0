@@ -2,7 +2,7 @@ const { Client } = require('discord.js')
 const config = require('./config/config.json')
 const client = new Client();
 
-(require('./src/SlashCommands/SlashCommands'))(client, config)
+new (require('./src/SlashCommands/SlashCommands'))(client, config)
 
 const OWNERS = []
 
