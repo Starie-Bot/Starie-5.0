@@ -69,8 +69,8 @@ class SlashCommands {
 
           Log.Print(JSON.stringify(command), CMDEXECUTE)
 
-          if (command.HasPermission(new Message(message))) {
-            return command.Run(new Message(message))
+          if (command.HasPermission(new Message(this.client, message, res))) {
+            return command.Run(new Message(this.client, message, res))
           }
       }
     })
