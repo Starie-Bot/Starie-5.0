@@ -3,7 +3,7 @@ const express = require('express')
 const path = require('path')
 
 const Log = new (require('../Logging/Logger'))()
-const { Message } = require('../SlashCommands/Message')
+const Message = require('../SlashCommands/Message')
 
 const { ReadDirectory } = require('../Utilities/FileUtilities')
 
