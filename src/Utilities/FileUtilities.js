@@ -1,8 +1,8 @@
-const requireAll = require("require-all");
+const requireAll = require('require-all')
 
 module.exports.ReadDirectory = (directory, onResolve) => {
-    requireAll({
-        dirname: directory,
-        resolve: onResolve
-    });
-};
+  requireAll({
+    dirname: directory,
+    resolve: onResolve
+  })
+}

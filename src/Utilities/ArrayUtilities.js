@@ -1,15 +1,14 @@
 /**
  * Determine the differences between two arrays
- * @param {Map} a 
- * @param {Map} b 
+ * @param {Map} a
+ * @param {Map} b
  */
 module.exports.Difference = (a, b) => {
-    let differences = [];
+  const differences = []
 
-    a.keys.forEach((value) => {
-        if (!b.has(value))
-            differences.push(value);
-    });
+  a.keys.forEach((value) => {
+    if (!b.has(value)) { differences.push(value) }
+  })
 
-    return differences;
-};
+  return differences
+}

@@ -1,21 +1,21 @@
-const {Client} = require("discord.js"),
-      config = require("./config/config.json");
+const { Client } = require('discord.js')
+const config = require('./config/config.json')
 const client = new Client();
 
-new (require("./src/SlashCommands/SlashCommands"))(client, config);
+(require('./src/SlashCommands/SlashCommands'))(client, config)
 
-const OWNERS = [];
+const OWNERS = []
 
-client.on("ready", async _ => {
-    for (let ownerID of config["OWNERS"]) {
-        let owner = await client.users.fetch(ownerID);
+client.on('ready', async _ => {
+  for (const ownerID of config.OWNERS) {
+    const owner = await client.users.fetch(ownerID)
 
-        if (!owner) {
-            continue;
-        }
-
-        OWNERS.push(owner);
+    if (!owner) {
+      continue
     }
-});
 
-client.login(config["TOKEN"]);
+    OWNERS.push(owner)
+  }
+})
+
+client.login(config.TOKEN)

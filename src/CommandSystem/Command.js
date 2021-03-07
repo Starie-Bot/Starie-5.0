@@ -1,6 +1,3 @@
-const {Client} = require("discord.js");
-
-const OptionType  = require("./OptionType");
 /**
  * @typedef  {Object}     Option
  * @property {OptionType} type
@@ -10,48 +7,44 @@ const OptionType  = require("./OptionType");
  * @property {String[]}   choices
  * @property {Option[]}   options
  */
-class Command 
-{
-    /**
+class Command {
+  /**
      * @typedef  {Object}   CommandData
      * @property {String}   name
      * @property {String}   description
      * @property {Option[]} args
-     * 
-     * @param {CommandData} data 
-     * @param {Client}      client 
+     *
+     * @param {CommandData} data
+     * @param {Client}      client
      */
-    constructor(data, client)
-    {
-        if (!data || !client)
-            return;
+  constructor (data, client) {
+    if (!data || !client) { return }
 
-        /**
+    /**
          * The command's name, defaults to the member name;
          * @type {String}
          */
-        this.name = data.memberName;
+    this.name = data.memberName
 
-        /**
+    /**
          * The command's description
          * @type {String}
          */
-        this.description = data.description || "No description";
+    this.description = data.description || 'No description'
 
-        /**
+    /**
          * The arguments.
          * @type {Option}
          */
-        this.options = data.args || [];
-    }
+    this.options = data.args || []
+  }
 
-    /**
+  /**
      * The function to be executed on command run.
      */
-    Run(client, message, res)
-    {
-        return console.error("Run not defined for command.");
-    }
+  Run (client, message, res) {
+    return console.error('Run not defined for command.')
+  }
 }
 
-module.exports = Command;
+module.exports = Command
