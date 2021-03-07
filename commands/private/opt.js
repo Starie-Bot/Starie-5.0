@@ -14,13 +14,13 @@ class PingCommand extends Command {
     }, client)
   }
 
-  async Run (client, message, res) {
-    const member = await (await client.guilds.fetch(message.guild_id)).members.fetch(message.member.user.id)
-    const role = await (await client.guilds.fetch(message.guild_id)).roles.fetch(message.data.options[0].options[0].value)
+  async Run (message) {
+    const member = await message.getMember()
+    const role = await (await message.getGuild()).roles.fetch(message._arguments.options[0].value)
 
-    if (!permittedRoles.includes(role.id)) { return res.send({ type: InteractionResponseType.ACKNOWLEDGE }) }
+    if (!permittedRoles.includes(role.id)) { return message.Reply({ type: InteractionResponseType.ACKNOWLEDGE }) }
 
-    switch (message.data.options[0].name) {
+    switch (message._arguments[0].name) {
       case 'in':
         member.roles.add(role)
         break
@@ -30,8 +30,9 @@ class PingCommand extends Command {
         break
     }
 
-    return res.send({
-      type: InteractionResponseType.ACKNOWLEDGE
+    message.Reply({
+      content: `You successfully opted ${message._arguments[0].name} to ${role.name}`,
+      flags: 64
     })
   }
 }

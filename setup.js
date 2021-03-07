@@ -13,8 +13,8 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 rl.question('What is the token of the Discord Bot you wish to use?\n', token => {
   config.TOKEN = token
 
-  rl.question('What is the public key of the Discord Bot you wish to use?\n', public_key => {
-    config.PUBLIC_KEY = public_key
+  rl.question('What is the public key of the Discord Bot you wish to use?\n', publicKey => {
+    config.PUBLIC_KEY = publicKey
 
     rl.question('What port would you like internal validation server to run on? (Default: 4949)\n', port => {
       config.SERVER_PORT = port

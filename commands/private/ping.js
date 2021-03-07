@@ -1,7 +1,4 @@
 const Command = require('../../src/CommandSystem/Command')
-const {
-  InteractionResponseType
-} = require('discord-interactions')
 
 class PingCommand extends Command {
   constructor (client) {
@@ -11,12 +8,10 @@ class PingCommand extends Command {
     }, client)
   }
 
-  Run (client, message, res) {
-    res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: `Pong! **${client.ws.ping}**ms!`
-      }
+  Run (message) {
+    message.Reply({
+      content: `Pong! **${message.client.ws.ping}**ms!`,
+      flags: 64
     })
   }
 }

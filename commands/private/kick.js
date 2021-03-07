@@ -1,7 +1,4 @@
 const Command = require('../../src/CommandSystem/Command')
-const {
-  InteractionResponseType
-} = require('discord-interactions')
 
 class PingCommand extends Command {
   constructor (client) {
@@ -12,21 +9,16 @@ class PingCommand extends Command {
     }, client)
   }
 
-  async Run (client, message, res) {
-    const member = await (await client.guilds.fetch(message.guild_id)).members.fetch(message.member.user.id)
-    const target = await (await client.guilds.fetch(message.guild_id)).members.fetch(message.data.options[0].value)
+  async HasPermission (message) {
+    return (await message.getMember()).hasPermission('KICK_MEMBERS')
+  }
 
-    if (!member.hasPermission('KICK_MEMBERS')) {
-      return res.send({
-        type: InteractionResponseType.ACKNOWLEDGE
-      })
-    }
+  async Run (message) {
+    const target = await (await message.getMember()).members.fetch(message._arguments[0].value)
 
-    target.kick({ reason: this.GetArgument('reason', message.data.options) ? this.GetArgument('reason', message.data.options).value : '' })
+    target.kick({ reason: this.GetArgument('reason', message._arguments) ? this.GetArgument('reason', message._arguments).value : '' })
 
-    res.send({
-      type: InteractionResponseType.ACKNOWLEDGE_WITH_SOURCE
-    })
+    message.Acknowledge()
   }
 }
 

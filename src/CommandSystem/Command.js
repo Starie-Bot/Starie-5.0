@@ -40,9 +40,18 @@ class Command {
   }
 
   /**
+      * Check whether or not the user has specific permissions.
+      * @param {import("discord.js").GuildMember} member
+      * @param {import("discord.js").PermissionFlags} permission
+      */
+  async HasPermission (message) {}
+
+  /**
      * The function to be executed on command run.
+     * @param {import("../SlashCommands/Message")} message
+     * @abstract
      */
-  Run (client, message, res) {
+  async Run (message) {
     return console.error('Run not defined for command.')
   }
 }
