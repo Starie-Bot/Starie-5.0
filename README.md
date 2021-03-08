@@ -3,7 +3,7 @@
   <a href="https://discord.gg/wG826KK">
     <img src="https://discordapp.com/api/guilds/606926504424767488/embed.png">
   </a>
-  ![Node.js CI](https://github.com/matthe815/starie/workflows/Node.js%20CI/badge.svg)
+    <img src="https://github.com/matthe815/starie/workflows/Node.js%20CI/badge.svg">
 </div>
 
 <a href="https://discord.com/api/oauth2/authorize?client_id=279451341909262337&permissions=11398&scope=bot%20applications.commands">Click here to add Starie to your server!</a>
