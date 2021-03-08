@@ -12,7 +12,6 @@ const { InteractionResponseType } = require('discord-interactions')
      */
 class Message {
   constructor (client, msg, res) {
-    console.log(msg)
     /**
       * The client of which spawned this instance.
       * @type {import("discord.js").Client}
