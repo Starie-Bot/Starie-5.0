@@ -18,14 +18,14 @@ My implementation intentions are but not limited to the following:
 - [X] An easily editable and scalable command system.
 - [X] Basic moderation functionality.
 - [X] A command suite completely with the new Slash Command system.
-- [] SQLITE3, and NOSQL storage options; controlled by a split driver.
-- [] Full Control /w an online panel.
-- [] Social Economy Functionality
-- [] Social Experience System /w Auto Roles
-- [] An Advanced Moderation Record System; editable through web-panel and server commands. Able to track and record any moderation action on a user.
-- [] Twitch Functionality
-- [] Twitch Bot /w Integration
-- [] Intelligent Bulk Deletion Functionality
+- [ ] SQLITE3, and NOSQL storage options; controlled by a split driver.
+- [ ] Full Control /w an online panel.
+- [ ] Social Economy Functionality
+- [ ] Social Experience System /w Auto Roles
+- [ ] An Advanced Moderation Record System; editable through web-panel and server commands. Able to track and record any moderation action on a user.
+- [ ] Twitch Functionality
+- [ ] Twitch Bot /w Integration
+- [ ] Intelligent Bulk Deletion Functionality
 
 ## Contribution
 You are free to contribute code through push-requests; you are also free to repurpose this software for your own purposes. While not necessary, we request that you provide a level of credit to the founding development team if you choose to use this software for your own private bot.
