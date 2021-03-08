@@ -12,6 +12,7 @@ const { InteractionResponseType } = require('discord-interactions')
      */
 class Message {
   constructor (client, msg, res) {
+    console.log(msg)
     /**
       * The client of which spawned this instance.
       * @type {import("discord.js").Client}
@@ -82,7 +83,7 @@ class Message {
    * @returns {import('discord.js').GuildMember}
    */
   async getMember () {
-    return await (await this.getGuild()).members.fetch(this._member_id)
+    return (await this.getGuild()).member(this._member_id)
   }
 
   /**

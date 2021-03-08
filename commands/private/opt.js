@@ -1,8 +1,4 @@
 const Command = require('../../src/CommandSystem/Command')
-const {
-  InteractionResponseType
-} = require('discord-interactions')
-
 const permittedRoles = ['683171264315129876', '742134494471127122', '742178276558241822']
 
 class PingCommand extends Command {
@@ -17,6 +13,9 @@ class PingCommand extends Command {
   async Run (message) {
     const member = await message.getMember()
     const role = await (await message.getGuild()).roles.fetch(message._arguments.options[0].value)
+
+    console.log(role)
+    console.log(message._arguments)
 
     if (!permittedRoles.includes(role.id)) { return message.Reply({ content: 'Invalid role provided to opt to.' }) }
 
