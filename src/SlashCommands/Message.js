@@ -69,7 +69,7 @@ class Message {
       * The arguments received within the command.
       * @type {import("../CommandSystem/Command").Option[]}
       */
-    this._arguments = msg.data.choices
+    this._arguments = msg.data.options
   }
 
   /**
