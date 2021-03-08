@@ -20,7 +20,7 @@ class Logger {
      * @param {LogTypes} type
      */
   Error (message) {
-    return console.log(`[ERROR] [${new Date().getHours()}:${new Date().getMinutes()}] [${type}] ${message}`)
+    return console.log(`[ERROR] [${new Date().getHours()}:${new Date().getMinutes()}] ${message}`)
   }
 }
 

@@ -18,7 +18,7 @@ class PingCommand extends Command {
     const member = await message.getMember()
     const role = await (await message.getGuild()).roles.fetch(message._arguments.options[0].value)
 
-    if (!permittedRoles.includes(role.id)) { return message.Reply({ type: InteractionResponseType.ACKNOWLEDGE }) }
+    if (!permittedRoles.includes(role.id)) { return message.Reply({ content: 'Invalid role provided to opt to.' }) }
 
     switch (message._arguments[0].name) {
       case 'in':
