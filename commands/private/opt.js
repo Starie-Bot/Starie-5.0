@@ -17,7 +17,7 @@ class PingCommand extends Command {
     console.log(role)
     console.log(message._arguments)
 
-    if (!permittedRoles.includes(role.id)) { return message.Reply({ content: 'Invalid role provided to opt to.' }) }
+    if (!permittedRoles.includes(role.id)) { return message.Reply({ content: 'Invalid role provided to opt to.', flags: 64 }) }
 
     switch (message._arguments[0].name) {
       case 'in':
