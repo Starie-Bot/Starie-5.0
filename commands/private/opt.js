@@ -12,7 +12,7 @@ class PingCommand extends Command {
 
   async Run (message) {
     const member = await message.getMember()
-    const role = await (await message.getGuild()).roles.fetch(message._arguments.options[0].value)
+    const role = await (await message.getGuild()).roles.fetch(message._arguments[0].value)
 
     console.log(role)
     console.log(message._arguments)
